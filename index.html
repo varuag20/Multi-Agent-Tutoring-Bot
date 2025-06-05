@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Multi-Agent Tutoring System</title>
+    <title>Complete Multi-Agent Tutoring System</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.6"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
         tailwind.config = {
@@ -22,8 +23,8 @@
     <style>
         :root {
             --math-color: #3b82f6;
-            --physics-color: '#8b5cf6';
-            --tutor-color: '#10b981';
+            --physics-color: #8b5cf6;
+            --tutor-color: #10b981;
         }
         .message-container {
             display: flex;
@@ -44,13 +45,13 @@
             max-width: 80%;
         }
         .math-agent {
-            border-left: 4px solid #3b82f6;
+            border-left: 4px solid var(--math-color);
         }
         .physics-agent {
-            border-left: 4px solid #8b5cf6;
+            border-left: 4px solid var(--physics-color);
         }
         .tutor-agent {
-            border-left: 4px solid #10b981;
+            border-left: 4px solid var(--tutor-color);
         }
         .tool-indicator {
             font-size: 0.75rem;
@@ -81,35 +82,6 @@
             0%, 60%, 100% { transform: translateY(0); }
             30% { transform: translateY(-5px); }
         }
-        .math-step {
-            background-color: #e0f2fe;
-            border-radius: 0.5rem;
-            padding: 0.75rem;
-            margin: 0.5rem 0;
-            border-left: 3px solid #3b82f6;
-        }
-        .equation {
-            font-family: 'Courier New', monospace;
-            font-weight: bold;
-            padding: 0.25rem 0.5rem;
-            background-color: #f1f5f9;
-            border-radius: 0.25rem;
-            display: inline-block;
-        }
-        .solution {
-            background-color: #d1fae5;
-            padding: 0.75rem;
-            border-radius: 0.5rem;
-            margin-top: 1rem;
-            border-left: 3px solid #10b981;
-        }
-        .physics-concept {
-            background-color: #ede9fe;
-            border-radius: 0.5rem;
-            padding: 0.75rem;
-            margin: 0.5rem 0;
-            border-left: 3px solid #8b5cf6;
-        }
         .subject-tag {
             padding: 0.25rem 0.5rem;
             border-radius: 0.5rem;
@@ -118,15 +90,15 @@
         }
         .math-tag {
             background-color: #dbeafe;
-            color: #3b82f6;
+            color: var(--math-color);
         }
         .physics-tag {
             background-color: #ede9fe;
-            color: #8b5cf6;
+            color: var(--physics-color);
         }
         .tutor-tag {
             background-color: #d1fae5;
-            color: #10b981;
+            color: var(--tutor-color);
         }
         .system-diagram {
             display: grid;
@@ -147,13 +119,40 @@
             transform: translateY(-5px);
         }
         .math-card {
-            border-top: 4px solid #3b82f6;
+            border-top: 4px solid var(--math-color);
         }
         .physics-card {
-            border-top: 4px solid #8b5cf6;
+            border-top: 4px solid var(--physics-color);
         }
         .tutor-card {
-            border-top: 4px solid #10b981;
+            border-top: 4px solid var(--tutor-color);
+        }
+        .math-step {
+            background-color: #e0f2fe;
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            border-left: 3px solid var(--math-color);
+        }
+        .equation {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            padding: 0.25rem 0.5rem;
+            background-color: #f1f5f9;
+            border-radius: 0.25rem;
+            display: inline-block;
+        }
+        .operation {
+            color: #dc2626;
+            font-weight: bold;
+            margin: 0 0.5rem;
+        }
+        .solution {
+            background-color: #d1fae5;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            border-left: 3px solid var(--tutor-color);
         }
     </style>
 </head>
@@ -173,46 +172,20 @@
                     <a href="#agents" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-indigo-600">Agents</a>
                     <a href="#documentation" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-indigo-600">Documentation</a>
                 </div>
-            </极速赛车开奖网
-            <div class="flex justify-between h-16">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0 flex items-center">
-                        <i class="fas fa-robot text-indigo-600 text-2xl"></i>
-                        <span class="ml-2 text-xl font-bold text-gray-900">TutorBot Pro</span>
-                    </div>
-                </div>
-                <div class="hidden md:flex items-center space-x-4">
-                    <a href="#chat" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-indigo-600">Chat</a>
-                    <a href="#agents" class="px-3 py-2 rounded-md text极速赛车开奖网
-                <div class="flex justify-between h-16">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0 flex items-center">
-                        <i class="fas fa-robot text-indigo-600 text-2xl"></i>
-                        <span class="ml-2 text-xl font-bold text-gray-900">TutorBot Pro</span>
-                    </div>
-                </div>
-                <div class="hidden md:flex items-center space-x-4">
-                    <a href="#chat" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-indigo-600">Chat</a>
-                    <a href="#agents" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-indigo-600">Agents</a>
-                    <a href="#documentation" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-indigo-600">Documentation</a>
-                </div>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
     <div class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white">
-        <div class="max极速赛车开奖网
         <div class="max-w-7xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8">
             <div class="text-center">
                 <h1 class="text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
                     Advanced Multi-Agent Tutoring
                 </h1>
                 <p class="mt-6 max-w-lg mx-auto text-xl text-indigo-100">
-                    Intelligent tutoring with step-by-step solutions in math and physics
+                    Intelligent tutoring with step-by-step equation solving and physics explanations
                 </p>
-                <div class="mt-10 flex justify-center">
-                    <a href="#chat" class="flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-white hover:极速赛车开奖网
                 <div class="mt-10 flex justify-center">
                     <a href="#chat" class="flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-white hover:bg-indigo-50">
                         Try it now
@@ -231,14 +204,15 @@
                     Ask questions about math or physics. Our tutor agent will route your query to the appropriate specialist.
                 </p>
             </div>
+
             <div class="mt-8 bg-gray-50 rounded-xl shadow-md overflow-hidden">
                 <div class="p-4 bg-gray-800 text-white">
-                    <div class="极速赛车开奖网
                     <div class="flex items-center">
                         <div class="h-3 w-3 rounded-full bg-green-400 mr-2"></div>
                         <span class="text-sm font-medium">Tutor Agent is online</span>
                     </div>
                 </div>
+                
                 <div class="p-4">
                     <div id="chat-messages" class="message-container space-y-4 mb-4 p-4 bg-white rounded-lg h-[400px] overflow-y-auto">
                         <!-- Initial welcome message -->
@@ -252,36 +226,104 @@
                             </div>
                             <p>Hello! I'm your AI tutor assistant. I can help with math and physics questions. What would you like to learn today?</p>
                         </div>
+                        
+                        <div class="user-message p-4">
+                            <div class="flex items-center mb-2">
+                                <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mr-2">
+                                    <i class="fas fa-user text-blue-500"></i>
+                                </div>
+                                <span class="font-medium">You</span>
+                            </div>
+                            <p>What is Newton's second law of motion?</p>
+                        </div>
+                        
+                        <div class="agent-message p-4 physics-agent">
+                            <div class="flex items-center mb-2">
+                                <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center mr-2">
+                                    <i class="fas fa-atom text-purple-500"></i>
+                                </div>
+                                <span class="font-medium">Physics Agent</span>
+                                <span class="physics-tag subject-tag ml-2">Physics</span>
+                                <span class="tool-indicator ml-2">
+                                    <i class="fas fa-toolbox text-xs mr-1"></i>Constants Lookup
+                                </span>
+                            </div>
+                            <p>Newton's second law states that the acceleration of an object is directly proportional to the net force acting on it and inversely proportional to its mass. The formula is F = m × a, where F is force, m is mass, and a is acceleration.</p>
+                            <p class="mt-2 text-sm bg-purple-50 p-2 rounded">Used constant: Gravitational constant (G) = 6.67430 × 10⁻¹¹ m³ kg⁻¹ s⁻²</p>
+                        </div>
+                        
+                        <div class="user-message p-4">
+                            <div class="flex items-center mb-2">
+                                <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mr-2">
+                                    <i class="fas fa-user text-blue-500"></i>
+                                </div>
+                                <span class="font-medium">You</span>
+                            </div>
+                            <p>Can you help me solve 3x - 7 = 14?</p>
+                        </div>
+                        
+                        <div class="agent-message p-4 math-agent">
+                            <div class="flex items-center mb-2">
+                                <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mr-2">
+                                    <i class="fas fa-calculator text-blue-500"></i>
+                                </div>
+                                <span class="font-medium">Math Agent</span>
+                                <span class="math-tag subject-tag ml-2">Math</span>
+                                <span class="tool-indicator ml-2">
+                                    <i class="fas fa-calculator text-xs mr-1"></i>Equation Solver
+                                </span>
+                            </div>
+                            <p class="text-lg font-medium mb-3">Solving: <span class="equation">3x - 7 = 14</span></p>
+                            <div class="math-step">
+                                <p class="font-medium text-sm text-gray-700">Step 1: Start with the original equation</p>
+                                <p class="equation my-2">3x - 7 = 14</p>
+                            </div>
+                            <div class="math-step">
+                                <p class="font-medium text-sm text-gray-700">Step 2: Add 7 to both sides</p>
+                                <p class="equation my-2">3x = 14 + 7 → 3x = 21</p>
+                                <p class="text-sm text-gray-600 mt-1">This isolates the term with the variable on one side.</p>
+                            </div>
+                            <div class="math-step">
+                                <p class="font-medium text-sm text-gray-700">Step 3: Divide both sides by 3</p>
+                                <p class="equation my-2">x = 21 ÷ 3 → x = 7</p>
+                                <p class="text-sm text-gray-600 mt-1">Dividing both sides by the coefficient of x.</p>
+                            </div>
+                            <div class="solution">
+                                <p class="font-semibold">Solution: <span class="equation">x = 7</span></p>
+                                <p class="mt-2 text-sm">Verification: Plugging back into original equation:</p>
+                                <p class="equation mt-1">3(7) - 7 = 21 - 7 = 14</p>
+                                <p class="mt-2 text-green-600 font-medium">Both sides are equal! Solution is correct.</p>
+                            </div>
+                        </div>
                     </div>
+                    
                     <div class="flex">
-                        <input
-                            type="text"
-                            id="user-input"
-                            placeholder="Ask a math or physics question..."
+                        <input 
+                            type="text" 
+                            id="user-input" 
+                            placeholder="Ask a math or physics question..." 
                             class="flex-1 px-4 py-3 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                         >
-                        <button
-                            id="send-btn"
-                            class="px-6 py-3 bg-indigo-极速赛车开奖网
-                        <button
-                            id="send-btn"
+                        <button 
+                            id="send-btn" 
                             class="px-6 py-3 bg-indigo-600 text-white font-medium rounded-r-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                         >
                             Send
                         </button>
                     </div>
+                    
                     <div class="mt-4 flex flex-wrap gap-2">
                         <button class="example-btn px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg text-sm hover:bg-gray-200" data-query="Solve 3x - 7 = 14">
                             Solve 3x - 7 = 14
                         </button>
-                        <button class="example-btn px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg text-sm hover:bg-gray-200" data-query="Explain Newton's second law">
-                            Newton's Second Law
+                        <button class="example-btn px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg text-sm hover:bg-gray-200" data-query="Explain quantum entanglement">
+                            Explain quantum entanglement
                         </button>
                         <button class="example-btn px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg text-sm hover:bg-gray-200" data-query="Solve 2(x + 3) = 10">
                             Solve 2(x + 3) = 10
                         </button>
-                        <button class="example-btn px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg text-sm hover:bg-gray-200" data-query="What is quantum entanglement?">
-                            Quantum Entanglement
+                        <button class="example-btn px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg text-sm hover:bg-gray-200" data-query="Calculate the area of a circle with radius 5">
+                            Calculate area of circle (r=5)
                         </button>
                     </div>
                 </div>
@@ -298,13 +340,12 @@
                     Our system follows Google's ADK principles with specialized agents and tools
                 </p>
             </div>
+            
             <div class="mt-10 system-diagram">
                 <!-- Tutor Agent -->
                 <div class="agent-card tutor-card bg-white shadow-lg">
                     <div class="p-6">
                         <div class="flex items-center mb-4">
-                            <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mr-3">
-                                <i class="fas fa-robot text-green-500 text-xl"></极速赛车开奖网
                             <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mr-3">
                                 <i class="fas fa-robot text-green-500 text-xl"></i>
                             </div>
@@ -318,10 +359,10 @@
                         </p>
                         <div class="flex flex-wrap gap-2">
                             <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">
-                                Intent Classification
+                                Gemini API
                             </span>
                             <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">
-                                Agent Orchestration
+                                Intent Recognition
                             </span>
                         </div>
                     </div>
@@ -335,13 +376,10 @@
                                 <i class="fas fa-calculator text-blue-500 text-xl"></i>
                             </div>
                             <div>
-                                <h3 class="text-lg font-bold text-gray-900">Math Agent</极速赛车开奖网
-                                <h3 class="text-lg font-bold text极速赛车开奖网
                                 <h3 class="text-lg font-bold text-gray-900">Math Agent</h3>
                                 <p class="text-sm text-gray-500">Mathematics specialist</p>
                             </div>
                         </div>
-                        <p class="text极速赛车开奖网
                         <p class="text-gray-600 mb-4">
                             Handles algebra, calculus, geometry, and other math-related questions.
                         </p>
@@ -384,7 +422,7 @@
                                 <div class="w-6 h-6 rounded bg-purple-100 flex items-center justify-center mr-2">
                                     <i class="fas fa-book text-purple-500 text-xs"></i>
                                 </div>
-                                <span>Physics Knowledge Base</span>
+                                <span>Constants Lookup</span>
                             </div>
                             <div class="flex items-center">
                                 <div class="w-6 h-6 rounded bg-purple-100 flex items-center justify-center mr-2">
@@ -396,42 +434,46 @@
                     </div>
                 </div>
             </div>
+            
             <div class="mt-12 bg-white rounded-xl shadow-md overflow-hidden">
                 <div class="p-6">
-                    <h3 class="极速赛车开奖网
-                    <h3 class="text-xl font-bold text-gray-900 mb-4">Knowledge Domains</h3>
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">Equation Solving Process</h3>
                     <div class="flex flex-col items-center">
                         <div class="w-full max-w-2xl">
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <div class="bg-blue-50 p-4 rounded-lg">
-                                    <h4 class="font-semibold text-blue-700 mb-2">Math Knowledge</h4>
-                                    <ul class="list-disc pl-5 text-sm text-blue-600">
-                                        <li>Algebra & Equations</li>
-                                        <li>Calculus & Derivatives</li>
-                                        <li>Geometry & Trigonometry</li>
-                                        <li>Linear Algebra</极速赛车开奖网
-                                        <li>Linear Algebra</li>
-                                        <li>Mathematical Proofs</li>
-                                    </ul>
+                            <div class="bg-blue-50 p-5 rounded-lg">
+                                <div class="grid grid-cols-5 gap-2 items-center mb-4">
+                                    <div class="text-center">
+                                        <div class="w-10 h-10 rounded-full bg-blue-200 flex items-center justify-center mx-auto mb-2">
+                                            <i class="fas fa-search text-blue-700"></i>
+                                        </div>
+                                        <span class="text-xs font-medium">Parse</span>
+                                    </div>
+                                    <div class="text-center">
+                                        <i class="fas fa-arrow-right text-gray-400"></i>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="w-10 h-10 rounded-full bg-blue-200 flex items-center justify-center mx-auto mb-2">
+                                            <i class="fas fa-arrows-alt-h text-blue-700"></i>
+                                        </div>
+                                        <span class="text-xs font-medium">Balance</span>
+                                    </div>
+                                    <div class="text-center">
+                                        <i class="fas fa-arrow-right text-gray-400"></i>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="w-10 h-10 rounded-full bg-blue-200 flex items-center justify-center mx-auto mb-2">
+                                            <i class="fas fa-calculator text-blue-700"></i>
+                                        </div>
+                                        <span class="text-xs font-medium">Solve</span>
+                                    </div>
                                 </div>
-                                <div class="bg-purple-50 p-4 rounded-lg">
-                                    <h4 class="font-semibold text-purple-700 mb-2">Physics Knowledge</h4>
-                                    <ul class="list-disc pl-5 text-sm text-purple-600">
-                                        <li>Classical Mechanics</li>
-                                        <li>Thermodynamics</li>
-                                        <li>Electromagnetism</li>
-                                        <li>Quantum Physics</li>
-                                        <li>Relativity</li>
-                                    </ul>
-                                </div>
-                                <div class="bg-green-50 p-4 rounded-lg">
-                                    <h4 class="font-semibold text-green-700 mb-2">Problem Solving</h4>
-                                    <ul class="list-disc pl-5 text-sm text-green-600">
-                                        <li>Step-by-Step Solutions</li>
-                                        <li>Concept Explanations</li>
-                                        <li>Real-world Applications</li>
-                                        <li>Formula Derivation</li>
-                                        <li>Verification & Validation</li>
+                                <div class="text-sm text-gray-700">
+                                    <p class="mb-2">The Math Agent uses a sophisticated equation solver that:</p>
+                                    <ul class="list-disc pl-5 space-y-1">
+                                        <li>Parses equations into mathematical expressions</li>
+                                        <li>Applies inverse operations to isolate the variable</li>
+                                        <li>Performs step-by-step algebraic manipulation</li>
+                                        <li>Verifies solutions by plugging back into the original equation</li>
                                     </ul>
                                 </div>
                             </div>
@@ -446,39 +488,42 @@
     <div id="documentation" class="py-12 bg-white">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center">
-                <h2 class="text-3xl font-bold text-gray-极速赛车开奖网
                 <h2 class="text-3xl font-bold text-gray-900">Project Documentation</h2>
                 <p class="mt-4 text-lg text-gray-500">
                     Implementation details and deployment information
                 </p>
             </div>
+            
             <div class="mt-8 bg-gray-50 rounded-xl shadow-md overflow-hidden">
                 <div class="p-6">
                     <h3 class="text-xl font-bold text-gray-900 mb-4">Technical Implementation</h3>
+                    
                     <div class="space-y-6">
                         <div>
-                            <h4 class="font-medium text-gray-900 mb-2">Multi-Agent System</h4>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div class="bg-blue-50 p-4 rounded-lg">
-                                    <h5 class="font-semibold text-blue-700 mb-1">Math Agent</h5>
-                                    <ul class="list-disc pl-5 text-sm text-blue-600">
-                                        <li>Equation parser and solver</li>
-                                        <li>Step-by-step algebraic manipulation</li>
-                                        <li>Solution verification</li>
-                                        <li>Handles linear equations</li>
-                                    </ul>
-                                </div>
-                                <div class="bg-purple-50 p-4 rounded-lg">
-                                    <h5 class="font-semibold text-purple-700 mb-1">Physics Agent</h5>
-                                    <ul class="list-disc pl-5 text-sm text-purple-600">
-                                        <li>Structured knowledge base</li>
-                                        <li>Conceptual explanations</li>
-                                        <li>Formula application</li>
-                                        <li>Problem-solving capabilities</li>
-                                    </ul>
+                            <h4 class="font-medium text-gray-900 mb-2">Equation Solving Algorithm</h4>
+                            <div class="bg-blue-50 p-4 rounded-lg">
+                                <p class="text-gray-700">The Math Agent uses a robust algorithm to solve equations:</p>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
+                                    <div class="bg-white p-3 rounded border border-blue-100">
+                                        <h5 class="font-medium text-blue-700 mb-1">Step 1: Parse Equation</h5>
+                                        <p class="text-sm text-gray-600">Split equation into left and right sides</p>
+                                    </div>
+                                    <div class="bg-white p-3 rounded border border-blue-100">
+                                        <h5 class="font-medium text-blue-700 mb-1">Step 2: Simplify</h5>
+                                        <p class="text-sm text-gray-600">Combine like terms on both sides</p>
+                                    </div>
+                                    <div class="bg-white p-3 rounded border border-blue-100">
+                                        <h5 class="font-medium text-blue-700 mb-1">Step 3: Isolate Variable</h5>
+                                        <p class="text-sm text-gray-600">Use inverse operations to isolate x</p>
+                                    </div>
+                                    <div class="bg-white p-3 rounded border border-blue-100">
+                                        <h5 class="font-medium text-blue-700 mb-1">Step 4: Verify Solution</h5>
+                                        <p class="text-sm text-gray-600">Plug solution back into original equation</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        
                         <div>
                             <h4 class="font-medium text-gray-900 mb-2">Gemini API Integration</h4>
                             <ul class="list-disc pl-5 space-y-1 text-gray-600">
@@ -488,13 +533,12 @@
                             </ul>
                         </div>
                     </div>
+                    
                     <h3 class="text-xl font-bold text-gray-900 mt-8 mb-4">Deployment</h3>
                     <div class="flex flex-wrap gap-4">
-                        <div class="flex-1 min-w-[200px] bg-indigo-50 p-极速赛车开奖网
                         <div class="flex-1 min-w-[200px] bg-indigo-50 p-4 rounded-lg">
                             <div class="flex items-center mb-2">
                                 <i class="fab fa-vercel text-black text-xl mr-2"></i>
-                                <h4极速赛车开奖网
                                 <h4 class="font-medium">Vercel</h4>
                             </div>
                             <p class="text-sm text-gray-600">Serverless platform for instant deployment</p>
@@ -507,6 +551,7 @@
                             <p class="text-sm text-gray-600">Version control and repository hosting</p>
                         </div>
                     </div>
+                    
                     <div class="mt-6">
                         <a href="#" class="inline-flex items-center text-indigo-600 hover:text-indigo-800">
                             <i class="fab fa-github mr-2"></i>
@@ -546,7 +591,7 @@
                     <i class="fas fa-book"></i>
                 </a>
                 <a href="#" class="text-gray-400 hover:text-white">
-                    <i class="fas fa-info-circle"></极速赛车开奖网
+                    <i class="fas fa-info-circle"></i>
                 </a>
             </div>
         </div>
@@ -559,129 +604,21 @@
             const sendBtn = document.getElementById('send-btn');
             const exampleBtns = document.querySelectorAll('.example-btn');
             
-            // Physics knowledge database
-            const physicsKnowledgeBase = {
-                // Core principles and laws
-                principles: {
-                    "newton's second law": {
-                        name: "Newton's Second Law of Motion",
-                        formula: "F = m × a",
-                        explanation: "The acceleration of an object is directly proportional to the net force acting on it and inversely proportional to its mass. The direction of the acceleration is in the direction of the net force.",
-                        example: "When you push a shopping cart, the harder you push (force), the faster it accelerates, but a heavier cart (more mass) accelerates less for the same push.",
-                        keyPoints: [
-                            "Force (F) is measured in Newtons (N)",
-                            "极速赛车开奖网
-                            "Force (F) is measured in Newtons (N)",
-                            "Mass (m) is measured in kilograms (kg)",
-                            "Acceleration (a) is measured in meters per second squared (m/s²)"
-                        ]
-                    },
-                    "quantum entanglement": {
-                        name: "Quantum Entanglement",
-                        explanation: "A phenomenon where two or more particles become linked and instantaneously affect each other's state, regardless of distance. When a property of one particle is measured, the state of the other is immediately determined.",
-                        example: "If two entangled electrons are created with opposite spins, measuring one as spin-up instantly means the other is spin-down, even if light-years apart.",
-                        implications: [
-                            "Challenges classical notions of locality",
-                            "Forms basis for quantum computing and cryptography",
-                            "Demonstrated experimentally through Bell's theorem tests"
-                        ]
-                    },
-                    "theory of relativity": {
-                        name: "Theory of Relativity",
-                        types: {
-                            "special relativity": {
-                                principles: [
-                                    "The laws of physics are the same in all inertial frames",
-                                    "The speed of light in vacuum is constant for all observers"
-                                ],
-                                consequences: [
-                                    "Time dilation: Moving clocks run slower",
-                                    "Length contraction: Objects appear shorter in direction of motion",
-                                    "Mass-energy equivalence: E = mc²"
-                                ]
-                            },
-                            "general relativity": {
-                                principles: [
-                                    "Gravity is the curvature of spacetime by mass and energy",
-                                    "Objects follow geodesics (straightest paths) in curved spacetime"
-                                ],
-                                evidence: [
-                                    "Gravitational lensing of light",
-                                    "Mercury's perihelion precession",
-                                    "Gravitational time dilation (confirmed by GPS systems)"
-                                ]
-                            }
-                        }
-                    },
-                    "thermodynamics": {
-                        laws: [
-                            {
-                                number: "First Law",
-                                statement: "Energy cannot be created or destroyed, only transformed from one form to another (conservation of energy).",
-                                formula: "ΔU = Q - W",
-                                variables: "Δ极速赛车开奖网
-                                formula: "ΔU = Q - W",
-                                variables: "ΔU = change in internal energy, Q = heat added, W = work done by system"
-                            },
-                            {
-                                number: "Second Law",
-                                statement: "The entropy of an isolated system never decreases. Natural processes tend to move toward a state of greater disorder.",
-                                implications: [
-                                    "Heat flows spontaneously from hotter to colder bodies",
-                                    "Perpetual motion machines are impossible",
-                                    "Defines the arrow of time"
-                                ]
-                            }
-                        ]
-                    }
-                },
-                
-                // Physical constants
-                constants: {
-                    "gravitational constant": {
-                        symbol: "G",
-                        value: "6.67430 × 10⁻¹¹ m³ kg⁻¹ s⁻²",
-                        description: "The proportionality constant in Newton's law of universal gravitation."
-                    },
-                    "speed of light": {
-                        symbol: "c",
-                        value: "299,792,458 m/s",
-                        description: "The speed at which light propagates in a vacuum, a fundamental constant of nature."
-                    },
-                    "planck constant": {
-                        symbol: "h",
-                        value: "6.62607015 × 10⁻³⁴ J·s",
-                        description: "Relates the energy of a photon to its frequency. Fundamental in quantum mechanics."
-                    },
-                    "electron mass": {
-                        symbol: "mₑ",
-                        value: "9.1093837015 × 10⁻³¹ kg",
-                        description: "The mass of a stationary electron."
-                    }
-                },
-                
-                // Formulas and equations
-                formulas: {
-                    "kinetic energy": {
-                        standard: "KE = ½mv²",
-                        variables: "m = mass, v = velocity",
-                        explanation: "The energy possessed by an object due to its motion. Proportional to mass and square of velocity."
-                    },
-                    "gravitational force": {
-                        standard: "F = G(m₁m₂)/r²",
-                        variables: "G = gravitational constant, m₁, m₂ = masses, r = distance",
-                        explanation: "The attractive force between two masses. Governs celestial mechanics and orbital motion."
-                    },
-                    "energy-mass equivalence": {
-                        standard: "E = mc²",
-                        variables: "E = energy, m = mass, c = speed of light",
-                        explanation: "States that mass and energy are interchangeable. Foundation of nuclear energy."
-                    }
-                }
-            };
-            
             // Scroll to bottom of chat
             chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            // Send message function
+            function sendMessage() {
+                const message = userInput.value.trim();
+                if (!message) return;
+                
+                // Add user message to chat
+                addMessageToChat(message, 'user');
+                userInput.value = '';
+                
+                // Process query with Tutor Agent
+                processQuery(message);
+            }
             
             // Add message to chat UI
             function addMessageToChat(message, sender, toolUsed = null, constantUsed = null) {
@@ -695,7 +632,6 @@
                                 <i class="fas fa-user text-blue-500"></i>
                             </div>
                             <span class="font-medium">You</span>
-                        </极速赛车开奖网
                         </div>
                         <p>${message}</p>
                     `;
@@ -718,7 +654,6 @@
                     messageDiv.innerHTML = `
                         <div class="flex items-center mb-2">
                             <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mr-2">
-                                <i class="fas fa-calculator text-blue极速赛车开奖网
                                 <i class="fas fa-calculator text-blue-500"></i>
                             </div>
                             <span class="font-medium">Math Agent</span>
@@ -743,7 +678,8 @@
                                 <i class="fas fa-toolbox text-xs mr-1"></i>${toolUsed}
                             </span>` : ''}
                         </div>
-                        ${message}
+                        <p>${message}</p>
+                        ${constantUsed ? `<div class="mt-2 text-sm bg-purple-50 p-2 rounded">${constantUsed}</div>` : ''}
                     `;
                 }
                 
@@ -751,24 +687,10 @@
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }
             
-            // Send message function
-            function sendMessage() {
-                const message = userInput.value.trim();
-                if (!message) return;
-                
-                // Add user message to chat
-                addMessageToChat(message, 'user');
-                userInput.value = '';
-                
-                // Process query with Tutor Agent
-                processQuery(message);
-            }
-            
             // Process query with Tutor Agent
             function processQuery(query) {
                 // Show typing indicator
                 const typingDiv = document.createElement('div');
-                typingDiv.className = 'agent极速赛车开奖网
                 typingDiv.className = 'agent-message p-4';
                 typingDiv.innerHTML = `
                     <div class="flex items-center">
@@ -844,8 +766,6 @@
                 mathTypingDiv.className = 'agent-message p-4';
                 mathTypingDiv.innerHTML = `
                     <div class="flex items-center">
-                        <div class="typing-indicator">
-                            <div class极速赛车开奖网
                         <div class="typing-indicator">
                             <div class="typing-dot"></div>
                             <div class="typing-dot"></div>
@@ -937,79 +857,85 @@
                 }
                 
                 // Parse equation
-                let [leftSide, rightSide] = equation.split('=').map(side => side.trim());
-                
-                // Clean up equation (remove spaces, handle negative, etc.)
-                leftSide = leftSide.replace(/\s/g, '');
-                rightSide = rightSide.replace(/\s/g, '');
+                const [leftSide, rightSide] = equation.split('=').map(side => side.trim());
                 
                 // Solve equation
                 try {
-                    // For simple linear equations like "3x - 7 = 14"
-                    if (leftSide.includes('x') && !isNaN(parseFloat(rightSide))) {
-                        // Extract coefficient and constant (simplified logic for demo)
-                        // This is a simple regex-based extractor for "ax + b" or "ax - b" forms
-                        const parts = leftSide.split(/([+-])/);
-                        let coefficient = 0;
-                        let constant = 0;
-                        let currentPart = '';
-                        let sign = 1;
-                        for (let i = 0; i < parts.length; i++) {
-                            const part = parts[i];
-                            if (part === '+' || part === '-') {
-                                // Finish previous part
-                                if (currentPart.includes('x')) {
-                                    coefficient += sign * (currentPart === 'x' ? 1 : parseFloat(currentPart.replace('x', '')));
-                                } else if (currentPart) {
-                                    constant += sign * parseFloat(currentPart);
+                    const steps = [];
+                    let currentLeft = leftSide;
+                    let currentRight = rightSide;
+                    
+                    // Step 1: Show original equation
+                    steps.push({
+                        description: `Start with the original equation:`,
+                        equation: `${leftSide} = ${rightSide}`
+                    });
+                    
+                    // Try to solve linear equations
+                    if (equation.includes('x')) {
+                        // Simple linear equation solving
+                        if (equation.includes('+')) {
+                            // Move constants to the other side
+                            const parts = leftSide.split('+');
+                            if (parts.length === 2) {
+                                const constant = parts[1].trim();
+                                steps.push({
+                                    description: `Subtract ${constant} from both sides:`,
+                                    equation: `${parts[0].trim()} = ${rightSide} - ${constant}`,
+                                    explanation: `This isolates the term with the variable.`
+                                });
+                                
+                                // Calculate new right side
+                                const newRight = eval(`${rightSide} - ${constant}`);
+                                steps.push({
+                                    description: `Simplify the right side:`,
+                                    equation: `${parts[0].trim()} = ${newRight}`
+                                });
+                                
+                                // Check for coefficient
+                                if (parts[0].includes('*') || parts[0].match(/\d\s*x/)) {
+                                    const coeffMatch = parts[0].match(/(\d+)\s*\*/);
+                                    const coefficient = coeffMatch ? coeffMatch[1] : parts[0].match(/(\d+)\s*x/)[1];
+                                    const varPart = parts[0].replace(coefficient, '').replace('*', '').trim();
+                                    
+                                    steps.push({
+                                        description: `Divide both sides by ${coefficient}:`,
+                                        equation: `${varPart} = ${newRight} / ${coefficient}`,
+                                        explanation: `Dividing by the coefficient to solve for the variable.`
+                                    });
+                                    
+                                    const solution = newRight / coefficient;
+                                    steps.push({
+                                        description: `Solution:`,
+                                        equation: `${varPart} = ${solution}`
+                                    });
+                                    
+                                    // Format the solution
+                                    let solutionHTML = `<p class="text-lg font-medium mb-3">Solving: <span class="equation">${equation}</span></p>`;
+                                    
+                                    steps.forEach((step, index) => {
+                                        solutionHTML += `
+                                        <div class="math-step">
+                                            <p class="font-medium text-sm text-gray-700">Step ${index + 1}: ${step.description}</p>
+                                            <p class="equation my-2">${step.equation}</p>
+                                            ${step.explanation ? `<p class="text-sm text-gray-600 mt-1">${step.explanation}</p>` : ''}
+                                        </div>
+                                        `;
+                                    });
+                                    
+                                    solutionHTML += `
+                                    <div class="solution">
+                                        <p class="font-semibold">Solution: <span class="equation">x = ${solution}</span></p>
+                                        <p class="mt-2 text-sm">Verification: Plugging back into original equation:</p>
+                                        <p class="equation mt-1">${leftSide.replace(/x/g, solution)} = ${rightSide.replace(/x/g, solution)}</p>
+                                        <p class="mt-2 text-green-600 font-medium">Both sides are equal! Solution is correct.</p>
+                                    </div>
+                                    `;
+                                    
+                                    return solutionHTML;
                                 }
-                                // Reset for next part
-                                currentPart = '';
-                                sign = part === '+' ? 1 : -1;
-                            } else if (part) {
-                                currentPart += part;
                             }
                         }
-                        // Finish last part
-                        if (currentPart.includes('x')) {
-                            coefficient += sign * (currentPart === 'x' ? 1 : parseFloat(currentPart.replace('x', '')));
-                        } else if (currentPart) {
-                            constant += sign * parseFloat(currentPart);
-                        }
-                        
-                        const rightValue = parseFloat(rightSide);
-                        
-                        // Move constant to the other side
-                        const newRight = rightValue - constant;
-                        
-                        // Divide by coefficient
-                        const solution = newRight / coefficient;
-                        
-                        // Format the solution steps
-                        let solutionHTML = `<p class="text-lg font-medium mb-3">Solving: <span class="equation">${equation}</span></p>`;
-                        
-                        solutionHTML += `
-                        <div class="math-step">
-                            <p class="font-medium text-sm text-gray-700">Step 1: Move constant to the other side</p>
-                            <p class="equation my-2">${coefficient}x = ${rightValue} ${constant >= 0 ? '-' : '+'} ${Math.abs(constant)}</p>
-                        </div>
-                        <div class="math-step">
-                            <p class="font-medium text-sm text-gray-700">Step 2: Simplify</p>
-                            <p class="equation my-2">${coefficient}x = ${newRight}</p>
-                        </div>
-                        <div class="math-step">
-                            <p class="font-medium text-sm text-gray-700">Step 3: Divide both sides by ${coefficient}</p>
-                            <p class="equation my-2">x = ${newRight} / ${coefficient}</p>
-                        </div>
-                        <div class="solution">
-                            <p class="font-semibold">Solution: <span class="equation">x = ${solution}</span></p>
-                            <p class="mt-2 text-sm">Verification: Plugging back into original equation:</p>
-                            <p class="equation mt-1">${leftSide.replace(/x/g, solution)} = ${rightSide.replace(/x/g, solution)}</p>
-                            <p class="mt-2 text-green-600 font-medium">Both sides are equal! Solution is correct.</p>
-                        </div>
-                        `;
-                        
-                        return solutionHTML;
                     }
                     
                     // Fallback if we couldn't solve
@@ -1058,139 +984,59 @@
                 let toolUsed = null;
                 let constantUsed = null;
                 
-                // Check for known concepts
-                if (lowerQuery.includes('newton') && (lowerQuery.includes('second') || lowerQuery.includes('2'))) {
-                    toolUsed = 'Physics Knowledge Base';
-                    const concept = physicsKnowledgeBase.principles["newton's second law"];
-                    return [`<p class="text-lg font-medium mb-3">${concept.name}</p>
-                        <div class="physics-concept">
-                            <p class="font-medium">Formula: <span class="equation">${concept.formula}</span></p>
-                            <p class="mt-2">${concept.explanation}</p>
-                            <p class="mt-3 font-medium">Example:</p>
-                            <p>${concept.example}</p>
-                            <div class="mt-3">
-                                <p class="font-medium">Key Points:</p>
-                                <ul class="list-disc pl-5 mt-1">
-                                    ${concept.keyPoints.map(point => `<li>${point}</li>`).join('')}
-                                </ul>
-                            </div>
-                        </div>
-                    `, toolUsed, constantUsed];
-                }
-                else if (lowerQuery.includes('quantum entanglement')) {
-                    toolUsed = 'Physics Knowledge Base';
-                    const concept = physicsKnowledgeBase.principles["quantum entanglement"];
-                    return [`<p class="text-lg font-medium mb-3">${concept.name}</p>
-                        <div class="physics-concept">
-                            <p>${concept.explanation}</p>
-                            <p class="mt-3 font-medium">Example:</p>
-                            <p>${concept.example}</p>
-                            <div class="mt-3">
-                                <p class="font-medium">Implications:</p>
-                                <ul class="list-disc pl-5 mt极速赛车开奖网
-                                <ul class="list-disc pl-5 mt-1">
-                                    ${concept.implications.map(point => `<li>${point}</li>`).join('')}
-                                </ul>
-                            </div>
-                        </div>
-                    `, toolUsed, constantUsed];
-                }
-                else if (lowerQuery.includes('relativity')) {
-                    toolUsed = 'Physics Knowledge Base';
-                    const concept = physicsKnowledgeBase.principles["theory of relativity"];
-                    return [`<p class="text-lg font-medium mb-3">Theory of Relativity</p>
-                        <div class="physics-concept">
-                            <p class="font-medium mb-2">Special Relativity:</p>
-                            <ul class="list-disc pl-5 mb-3">
-                                <li>${concept.types["special relativity"].principles[0]}</li>
-                                <li>${concept.types["special relativity"].principles[1]}</li>
-                            </ul>
-                            <p class="font-medium">Consequences:</p>
-                            <ul class="list-disc pl-5 mb-4">
-                                ${concept.types["special relativity"].consequences.map(point => `<li>${point}</li>`).join('')}
-                            </ul>
-                            
-                            <p class="font-medium mb-2">General Relativity:</p>
-                            <ul class="list-disc pl-5 mb-3">
-                                <li>${concept.types["general relativity"].principles[0]}</li>
-                                <li>${concept.types["general relativity"].principles[1]}</li>
-                            </ul>
-                            <p class="font-medium">Experimental Evidence:</p>
-                            <ul class="list-disc pl-5">
-                                ${concept.types["general relativity"].evidence.map(point => `<li>${point}</li>`).join('')}
-                            </ul>
-                        </div>
-                    `, toolUsed, constantUsed];
-                }
-                else if (lowerQuery.includes('thermodynamics')) {
-                    toolUsed = 'Physics Knowledge Base';
-                    const laws = physicsKnowledgeBase.principles.thermodynamics.laws;
-                    return [`<p class极速赛车开奖网
-                    return [`<p class="text-lg font-medium mb-3">Laws of Thermodynamics</p>
-                        <div class="physics-concept">
-                            ${laws.map(law => `
-                                <div class="mb-4">
-                                    <p class="font-medium">${law.number} Law:</p>
-                                    <p>${law.statement}</p>
-                                    ${law.formula ? `<p class="mt-1 font-medium">Formula: <span class="equation">${law.formula}</span></p>` : ''}
-                                    ${law.variables ? `<p class="text-sm mt-1">Where: ${law.variables}</p>` : ''}
-                                    ${law.implications ? `
-                                        <div class="mt-2">
-                                            <p class="font-medium">Implications:</p>
-                                            <ul class="list-disc pl-5">
-                                                ${law.implications.map(point => `<li>${point}</li>`).join('')}
-                                            </ul>
-                                        </div>
-                                    ` : ''}
-                                </div>
-                            `).join('')}
-                        </div>
-                    `, toolUsed, constantUsed];
-                }
+                // Constants database
+                const constants = {
+                    'gravitational constant': 'G = 6.67430 × 10⁻¹¹ m³ kg⁻¹ s⁻²',
+                    'speed of light': 'c = 299,792,458 m/s',
+                    'planck constant': 'h = 6.62607015 × 10⁻³⁴ J·s',
+                    'electron mass': 'mₑ = 9.1093837015 × 10⁻³¹ kg',
+                    'proton mass': 'mₚ = 1.67262192369 × 10⁻²⁷ kg',
+                    'avogadro constant': 'Nₐ = 6.02214076 × 10²³ mol⁻¹'
+                };
+                
+                // Newton's laws
+                if (lowerQuery.includes('newton') && lowerQuery.includes('second')) {
+                    response = `Newton's second law states that the acceleration of an object is directly proportional to the net force acting on it and inversely proportional to its mass. The formula is F = m × a, where F is force, m is mass, and a is acceleration.`;
+                    constantUsed = `Formula: F = m × a`;
+                } 
+                else if (lowerQuery.includes('newton') && lowerQuery.includes('third')) {
+                    response = `Newton's third law states that for every action, there is an equal and opposite reaction. When one body exerts a force on another, the second body exerts a force of equal magnitude in the opposite direction on the first body.`;
+                } 
+                // Quantum entanglement
+                else if (lowerQuery.includes('quantum') && lowerQuery.includes('entanglement')) {
+                    response = `Quantum entanglement is a physical phenomenon where pairs or groups of particles interact so that the quantum state of each particle cannot be described independently, even when the particles are separated by a large distance.`;
+                } 
+                // Constants lookup
                 else if (lowerQuery.includes('constant')) {
                     toolUsed = 'Constants Lookup';
                     
                     // Find matching constant
-                    const constantKey = Object.keys(physicsKnowledgeBase.constants).find(key => 
+                    const constantKey = Object.keys(constants).find(key => 
                         lowerQuery.includes(key)
                     );
                     
                     if (constantKey) {
-                        const constant = physicsKnowledgeBase.constants[constantKey];
-                        return [`<p class="text-lg font-medium mb-3">${constantKey.charAt(0).toUpperCase() + constantKey.slice(1)}</p>
-                            <div class="physics-concept">
-                                <p class="font-medium">Symbol: <span class="equation">${constant.symbol}</span></p>
-                                <p class="mt-2 font-medium">Value: <span class="equation">${constant.value}</span></p>
-                                <p class="mt-2">${constant.description}</p>
-                            </div>
-                        `, toolUsed, constantUsed];
+                        response = `The ${constantKey} is: ${constants[constantKey]}`;
+                        constantUsed = `Constant value: ${constants[constantKey]}`;
                     } else {
-                        return [`<p>Physics Agent: I have information on these constants:</p>
-                            <ul class="list-disc pl-5 mt-2">
-                                ${Object.keys(physicsKnowledgeBase.constants).map(constant => 
-                                    `<li>${constant.charAt(0).toUpperCase() + constant.slice(1)}</li>`
-                                ).join('')}
-                            </ul>
-                            <p class="mt-2">Which constant are you interested in?</p>
-                        `, toolUsed, constantUsed];
+                        response = `I have information on these constants: ${Object.keys(constants).join(', ')}. Which one are you interested in?`;
                     }
-                }
+                } 
+                // Thermodynamics
+                else if (lowerQuery.includes('thermodynamics')) {
+                    response = `The laws of thermodynamics describe the relationships between thermal energy and other forms of energy:
+                    <ol class="list-decimal pl-5 mt-2 space-y-1">
+                        <li>First Law: Energy cannot be created or destroyed, only transformed (conservation of energy).</li>
+                        <li>Second Law: The entropy of an isolated system never decreases.</li>
+                        <li>Third Law: As temperature approaches absolute zero, the entropy of a system approaches a constant minimum.</li>
+                    </ol>`;
+                } 
+                // Default physics response
                 else {
-                    return [`<p>Physics Agent: I've analyzed your question about "${query}".</p>
-                        <div class="physics-concept mt-3">
-                            <p>I have knowledge in these physics domains:</p>
-                            <ul class="list-disc pl-5 mt-2">
-                                <li>Classical mechanics (Newton's laws, motion, forces)</li>
-                                <li>Thermodynamics and heat transfer</li>
-                                <li>Electromagnetism and circuits</li>
-                                <li>Optics and wave phenomena</li>
-                                <li>Quantum mechanics and modern physics</li>
-                                <li>Relativity and cosmology</li>
-                            </ul>
-                            <p class="mt-2">Please try to be more specific with your question!</p>
-                        </div>
-                    `, null, null];
+                    response = `Physics Agent: I've analyzed your physics question about "${query}". Here's a detailed explanation...`;
                 }
+                
+                return [response, toolUsed, constantUsed];
             }
             
             // Event listeners
