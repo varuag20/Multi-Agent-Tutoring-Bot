@@ -3,14 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TutorBot Pro - Multi-Agent Tutoring System</title>
+    <title>Multi-Agent Tutoring System</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        math: '#3b82f6',
+                        physics: '#8b5cf6',
+                        tutor: '#10b981',
+                    }
+                }
+            }
+        }
+    </script>
     <style>
         :root {
             --math-color: #3b82f6;
             --physics-color: #8b5cf6;
             --tutor-color: #10b981;
+        }
+        .message-container {
+            display: flex;
+            flex-direction: column;
+            max-height: 65vh;
+            overflow-y: auto;
+        }
+        .user-message {
+            align-self: flex-end;
+            background-color: #dbeafe;
+            border-radius: 1rem 1rem 0 1rem;
+            max-width: 80%;
+        }
+        .agent-message {
+            align-self: flex-start;
+            background-color: #f3f4f6;
+            border-radius: 1rem 1rem 1rem 0;
+            max-width: 80%;
+        }
+        .tutor-agent {
+            border-left: 4px solid var(--tutor-color);
+        }
+        .tool-indicator {
+            font-size: 0.75rem;
+            background-color: #e5e7eb;
+            padding: 0.2rem 0.5rem;
+            border-radius: 0.5rem;
+            display: inline-block;
+        }
+        .typing-indicator {
+            display: inline-flex;
+            align-items: center;
+        }
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #6b7280;
+            border-radius: 50%;
+            margin: 0 2px;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-5px); }
+        }
+        .subject-tag {
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        .tutor-tag {
+            background-color: #d1fae5;
+            color: var(--tutor-color);
         }
     </style>
 </head>
@@ -28,7 +101,7 @@
                 <div class="hidden md:flex items-center space-x-4">
                     <a href="#chat" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-indigo-600">Chat</a>
                     <a href="#agents" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-indigo-600">Agents</a>
-                    <a href="#about" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-indigo-600">About</a>
+                    <a href="#documentation" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-indigo-600">Documentation</a>
                 </div>
             </div>
         </div>
@@ -53,14 +126,65 @@
         </div>
     </div>
 
-    <!-- Placeholder for Chat Interface -->
+    <!-- Chat Interface -->
     <div id="chat" class="py-12 bg-white">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center">
                 <h2 class="text-3xl font-bold text-gray-900">Interactive Tutor</h2>
                 <p class="mt-4 text-lg text-gray-500">
-                    Chat interface coming soon...
+                    Ask questions about math or physics. Our tutor agent will route your query to the appropriate specialist.
                 </p>
+            </div>
+            <div class="mt-8 bg-gray-50 rounded-xl shadow-md overflow-hidden">
+                <div class="p-4 bg-gray-800 text-white">
+                    <div class="flex items-center">
+                        <div class="h-3 w-3 rounded-full bg-green-400 mr-2"></div>
+                        <span class="text-sm font-medium">Tutor Agent is online</span>
+                    </div>
+                </div>
+                <div class="p-4">
+                    <div id="chat-messages" class="message-container space-y-4 mb-4 p-4 bg-white rounded-lg h-[400px] overflow-y-auto">
+                        <!-- Initial welcome message -->
+                        <div class="agent-message p-4 tutor-agent">
+                            <div class="flex items-center mb-2">
+                                <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center mr-2">
+                                    <i class="fas fa-robot text-green-500"></i>
+                                </div>
+                                <span class="font-medium">Tutor Agent</span>
+                                <span class="tutor-tag subject-tag ml-2">Tutor</span>
+                            </div>
+                            <p>Hello! I'm your AI tutor assistant. I can help with math and physics questions. What would you like to learn today?</p>
+                        </div>
+                    </div>
+                    <div class="flex">
+                        <input
+                            type="text"
+                            id="user-input"
+                            placeholder="Ask a math or physics question..."
+                            class="flex-1 px-4 py-3 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                        >
+                        <button
+                            id="send-btn"
+                            class="px-6 py-3 bg-indigo-600 text-white font-medium rounded-r-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        >
+                            Send
+                        </button>
+                    </div>
+                    <div class="mt-4 flex flex-wrap gap-2">
+                        <button class="example-btn px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg text-sm hover:bg-gray-200" data-query="Solve 3x - 7 = 14">
+                            Solve 3x - 7 = 14
+                        </button>
+                        <button class="example-btn px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg text-sm hover:bg-gray-200" data-query="Explain Newton's second law">
+                            Newton's Second Law
+                        </button>
+                        <button class="example-btn px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg text-sm hover:bg-gray-200" data-query="Solve 2(x + 3) = 10">
+                            Solve 2(x + 3) = 10
+                        </button>
+                        <button class="example-btn px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg text-sm hover:bg-gray-200" data-query="What is quantum entanglement?">
+                            Quantum Entanglement
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -77,11 +201,88 @@
                 </div>
                 <div class="mt-8 md:mt-0 md:order-1">
                     <p class="text-center text-base text-gray-400">
-                        Multi-Agent Tutoring System
+                        Multi-Agent Tutoring System - Final Assignment
                     </p>
                 </div>
             </div>
+            <div class="mt-8 flex justify-center space-x-6">
+                <a href="#" class="text-gray-400 hover:text-white">
+                    <i class="fab fa-github"></i>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-white">
+                    <i class="fas fa-book"></i>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-white">
+                    <i class="fas fa-info-circle"></i>
+                </a>
+            </div>
         </div>
     </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatMessages = document.getElementById('chat-messages');
+            const userInput = document.getElementById('user-input');
+            const sendBtn = document.getElementById('send-btn');
+            const exampleBtns = document.querySelectorAll('.example-btn');
+            
+            // Add message to chat UI
+            function addMessageToChat(message, sender) {
+                const messageDiv = document.createElement('div');
+                if (sender === 'user') {
+                    messageDiv.className = 'user-message p-4';
+                    messageDiv.innerHTML = `
+                        <div class="flex items-center mb-2">
+                            <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mr-2">
+                                <i class="fas fa-user text-blue-500"></i>
+                            </div>
+                            <span class="font-medium">You</span>
+                        </div>
+                        <p>${message}</p>
+                    `;
+                } else if (sender === 'tutor') {
+                    messageDiv.className = 'agent-message p-4 tutor-agent';
+                    messageDiv.innerHTML = `
+                        <div class="flex items-center mb-2">
+                            <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center mr-2">
+                                <i class="fas fa-robot text-green-500"></i>
+                            </div>
+                            <span class="font-medium">Tutor Agent</span>
+                            <span class="tutor-tag subject-tag ml-2">Tutor</span>
+                        </div>
+                        <p>${message}</p>
+                    `;
+                }
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            // Send message function
+            function sendMessage() {
+                const message = userInput.value.trim();
+                if (!message) return;
+                addMessageToChat(message, 'user');
+                userInput.value = '';
+                // Simple echo for now; agent logic comes in Commit 3
+                setTimeout(() => {
+                    addMessageToChat("I'm your Tutor Agent. I can help with math and physics questions. Try clicking an example!", 'tutor');
+                }, 1000);
+            }
+            
+            // Event listeners
+            sendBtn.addEventListener('click', sendMessage);
+            userInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+            exampleBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    userInput.value = this.dataset.query;
+                    sendMessage();
+                });
+            });
+        });
+    </script>
 </body>
 </html>
