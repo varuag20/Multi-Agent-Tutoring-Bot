@@ -226,75 +226,6 @@
                             </div>
                             <p>Hello! I'm your AI tutor assistant. I can help with math and physics questions. What would you like to learn today?</p>
                         </div>
-                        
-                        <div class="user-message p-4">
-                            <div class="flex items-center mb-2">
-                                <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mr-2">
-                                    <i class="fas fa-user text-blue-500"></i>
-                                </div>
-                                <span class="font-medium">You</span>
-                            </div>
-                            <p>What is Newton's second law of motion?</p>
-                        </div>
-                        
-                        <div class="agent-message p-4 physics-agent">
-                            <div class="flex items-center mb-2">
-                                <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center mr-2">
-                                    <i class="fas fa-atom text-purple-500"></i>
-                                </div>
-                                <span class="font-medium">Physics Agent</span>
-                                <span class="physics-tag subject-tag ml-2">Physics</span>
-                                <span class="tool-indicator ml-2">
-                                    <i class="fas fa-toolbox text-xs mr-1"></i>Constants Lookup
-                                </span>
-                            </div>
-                            <p>Newton's second law states that the acceleration of an object is directly proportional to the net force acting on it and inversely proportional to its mass. The formula is F = m × a, where F is force, m is mass, and a is acceleration.</p>
-                            <p class="mt-2 text-sm bg-purple-50 p-2 rounded">Used constant: Gravitational constant (G) = 6.67430 × 10⁻¹¹ m³ kg⁻¹ s⁻²</p>
-                        </div>
-                        
-                        <div class="user-message p-4">
-                            <div class="flex items-center mb-2">
-                                <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mr-2">
-                                    <i class="fas fa-user text-blue-500"></i>
-                                </div>
-                                <span class="font-medium">You</span>
-                            </div>
-                            <p>Can you help me solve 3x - 7 = 14?</p>
-                        </div>
-                        
-                        <div class="agent-message p-4 math-agent">
-                            <div class="flex items-center mb-2">
-                                <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mr-2">
-                                    <i class="fas fa-calculator text-blue-500"></i>
-                                </div>
-                                <span class="font-medium">Math Agent</span>
-                                <span class="math-tag subject-tag ml-2">Math</span>
-                                <span class="tool-indicator ml-2">
-                                    <i class="fas fa-calculator text-xs mr-1"></i>Equation Solver
-                                </span>
-                            </div>
-                            <p class="text-lg font-medium mb-3">Solving: <span class="equation">3x - 7 = 14</span></p>
-                            <div class="math-step">
-                                <p class="font-medium text-sm text-gray-700">Step 1: Start with the original equation</p>
-                                <p class="equation my-2">3x - 7 = 14</p>
-                            </div>
-                            <div class="math-step">
-                                <p class="font-medium text-sm text-gray-700">Step 2: Add 7 to both sides</p>
-                                <p class="equation my-2">3x = 14 + 7 → 3x = 21</p>
-                                <p class="text-sm text-gray-600 mt-1">This isolates the term with the variable on one side.</p>
-                            </div>
-                            <div class="math-step">
-                                <p class="font-medium text-sm text-gray-700">Step 3: Divide both sides by 3</p>
-                                <p class="equation my-2">x = 21 ÷ 3 → x = 7</p>
-                                <p class="text-sm text-gray-600 mt-1">Dividing both sides by the coefficient of x.</p>
-                            </div>
-                            <div class="solution">
-                                <p class="font-semibold">Solution: <span class="equation">x = 7</span></p>
-                                <p class="mt-2 text-sm">Verification: Plugging back into original equation:</p>
-                                <p class="equation mt-1">3(7) - 7 = 21 - 7 = 14</p>
-                                <p class="mt-2 text-green-600 font-medium">Both sides are equal! Solution is correct.</p>
-                            </div>
-                        </div>
                     </div>
                     
                     <div class="flex">
@@ -720,7 +651,7 @@
                         routeToPhysicsAgent(query);
                     } else {
                         // General response from Tutor Agent
-                        addMessageToChat("I've routed your question to the appropriate specialist agent. Please wait while I process it...", 'tutor');
+                        addMessageToChat("I'm not sure which specialist can best help with that. I'll try my best!", 'tutor');
                         // Default to math if unsure
                         setTimeout(() => routeToMathAgent(query), 1000);
                     }
@@ -744,7 +675,7 @@
                 }
                 
                 // Check for equations or calculations
-                if (/\d+[\+\-\*\/]\d+/.test(lowerQuery) || /solve for [a-z]/.test(lowerQuery)) {
+                if (/\d+[\+\-\*\/]\d+/.test(lowerQuery) || /solve for [a-z]/.test(lowerQuery) || lowerQuery.includes('=')) {
                     return 'math';
                 }
                 
@@ -799,17 +730,15 @@
                 if (lowerQuery.includes('solve') || lowerQuery.includes('=')) {
                     toolUsed = 'Equation Solver';
                     
-                    // Extract equation
-                    let equation = '';
+                    let equation = query;
                     if (lowerQuery.includes('solve')) {
-                        equation = query.split('solve')[1].trim();
-                    } else {
-                        equation = query;
+                        const parts = query.split(/solve/i);
+                        if(parts.length > 1 && parts[1]) {
+                           equation = parts[1].trim();
+                        }
                     }
                     
-                    // Solve the equation
-                    const solution = solveEquation(equation);
-                    response = solution;
+                    response = solveEquation(equation);
                 } 
                 // Area calculation
                 else if (lowerQuery.includes('area')) {
@@ -840,7 +769,7 @@
                 } 
                 // Default math response
                 else {
-                    response = `Math Agent: I've processed your math question about "${query}". Here's a detailed explanation...`;
+                    response = `Math Agent: I've processed your math question about "${query}". My capabilities are focused on equation solving and basic calculations. Please try asking me to "solve" an equation.`;
                 }
                 
                 return [response, toolUsed, calculation];
@@ -848,100 +777,134 @@
             
             // Equation solver with step-by-step solution
             function solveEquation(equationStr) {
-                // Extract equation from string
-                let equation = equationStr.toLowerCase().replace('solve', '').trim();
-                
-                // If equation doesn't contain '=', assume it's an expression to solve
-                if (!equation.includes('=')) {
-                    return "Math Agent: Please provide an equation with an equals sign (e.g., 3x - 7 = 14).";
+                if (typeof equationStr !== 'string' || !equationStr.trim()) {
+                    return "Math Agent: Please provide an equation to solve (e.g., 'solve 3x - 7 = 14').";
                 }
                 
-                // Parse equation
-                const [leftSide, rightSide] = equation.split('=').map(side => side.trim());
+                let equation = equationStr.toLowerCase().replace('solve', '').trim();
                 
-                // Solve equation
+                if (!equation.includes('=')) {
+                    return "Math Agent: Please provide a valid equation with an equals sign (e.g., 3x - 7 = 14).";
+                }
+                
+                let [leftSide, rightSide] = equation.split('=').map(side => side.trim());
+                
                 try {
                     const steps = [];
-                    let currentLeft = leftSide;
-                    let currentRight = rightSide;
-                    
-                    // Step 1: Show original equation
+                    const originalEquationForDisplay = `${leftSide} = ${rightSide}`;
                     steps.push({
                         description: `Start with the original equation:`,
-                        equation: `${leftSide} = ${rightSide}`
+                        equation: originalEquationForDisplay
                     });
-                    
-                    // Try to solve linear equations
-                    if (equation.includes('x')) {
-                        // Simple linear equation solving
-                        if (equation.includes('+')) {
-                            // Move constants to the other side
-                            const parts = leftSide.split('+');
-                            if (parts.length === 2) {
-                                const constant = parts[1].trim();
-                                steps.push({
-                                    description: `Subtract ${constant} from both sides:`,
-                                    equation: `${parts[0].trim()} = ${rightSide} - ${constant}`,
-                                    explanation: `This isolates the term with the variable.`
-                                });
-                                
-                                // Calculate new right side
-                                const newRight = eval(`${rightSide} - ${constant}`);
-                                steps.push({
-                                    description: `Simplify the right side:`,
-                                    equation: `${parts[0].trim()} = ${newRight}`
-                                });
-                                
-                                // Check for coefficient
-                                if (parts[0].includes('*') || parts[0].match(/\d\s*x/)) {
-                                    const coeffMatch = parts[0].match(/(\d+)\s*\*/);
-                                    const coefficient = coeffMatch ? coeffMatch[1] : parts[0].match(/(\d+)\s*x/)[1];
-                                    const varPart = parts[0].replace(coefficient, '').replace('*', '').trim();
-                                    
-                                    steps.push({
-                                        description: `Divide both sides by ${coefficient}:`,
-                                        equation: `${varPart} = ${newRight} / ${coefficient}`,
-                                        explanation: `Dividing by the coefficient to solve for the variable.`
-                                    });
-                                    
-                                    const solution = newRight / coefficient;
-                                    steps.push({
-                                        description: `Solution:`,
-                                        equation: `${varPart} = ${solution}`
-                                    });
-                                    
-                                    // Format the solution
-                                    let solutionHTML = `<p class="text-lg font-medium mb-3">Solving: <span class="equation">${equation}</span></p>`;
-                                    
-                                    steps.forEach((step, index) => {
-                                        solutionHTML += `
-                                        <div class="math-step">
-                                            <p class="font-medium text-sm text-gray-700">Step ${index + 1}: ${step.description}</p>
-                                            <p class="equation my-2">${step.equation}</p>
-                                            ${step.explanation ? `<p class="text-sm text-gray-600 mt-1">${step.explanation}</p>` : ''}
-                                        </div>
-                                        `;
-                                    });
-                                    
-                                    solutionHTML += `
-                                    <div class="solution">
-                                        <p class="font-semibold">Solution: <span class="equation">x = ${solution}</span></p>
-                                        <p class="mt-2 text-sm">Verification: Plugging back into original equation:</p>
-                                        <p class="equation mt-1">${leftSide.replace(/x/g, solution)} = ${rightSide.replace(/x/g, solution)}</p>
-                                        <p class="mt-2 text-green-600 font-medium">Both sides are equal! Solution is correct.</p>
-                                    </div>
-                                    `;
-                                    
-                                    return solutionHTML;
-                                }
-                            }
+
+                    // Handle parentheses distribution e.g., 2(x + 3)
+                    if (leftSide.includes('(')) {
+                        const match = leftSide.match(/(-?\d*\.?\d*)\s*\((.+)\)/);
+                        if (match) {
+                            const multiplier = (match[1] === '' || match[1] === '+') ? 1 : (match[1] === '-') ? -1 : parseFloat(match[1]);
+                            const insideExpr = match[2];
+
+                            // Parse inside expression (e.g., 'x + 3')
+                            const insideXMatch = insideExpr.match(/(-?\d*\.?\d*)x/);
+                            let insideCoeff = insideExpr.includes('x') ? (insideXMatch ? ((insideXMatch[1] === '' || insideXMatch[1] === '+') ? 1 : (insideXMatch[1] === '-') ? -1 : parseFloat(insideXMatch[1])) : 1) : 0;
+                            const insideConstString = insideExpr.replace(insideXMatch ? insideXMatch[0] : 'x', '').trim();
+                            let insideConst = insideConstString ? parseFloat(insideConstString.replace(/\s/g, '')) : 0;
+                            
+                            const newCoeff = multiplier * insideCoeff;
+                            const newConst = multiplier * insideConst;
+                            
+                            const expandedLeftSide = `${newCoeff}x ${newConst >= 0 ? '+' : '-'} ${Math.abs(newConst)}`;
+                            
+                            steps.push({
+                                description: `Distribute the ${multiplier} into the parentheses:`,
+                                equation: `${leftSide}  →  ${expandedLeftSide}`
+                            });
+
+                            leftSide = expandedLeftSide.replace(/\s/g, ''); // Update leftSide for further processing
                         }
                     }
+
+                    // Parse the left side for coefficient and constant
+                    let coefficient = 0;
+                    let constant = 0;
+                    // Regex to find all terms (e.g., '2x', '-7', '+x')
+                    const terms = leftSide.replace(/\s/g, '').match(/([+\-]?\d*\.?\d*x|[+\-]?\d+\.?\d*)/g) || [];
                     
-                    // Fallback if we couldn't solve
-                    return `Math Agent: I've processed your math question about "${equationStr}". Here's a detailed explanation...`;
+                    terms.forEach(term => {
+                        if (term.includes('x')) {
+                            if (term === 'x' || term === '+x') coefficient += 1;
+                            else if (term === '-x') coefficient -= 1;
+                            else coefficient += parseFloat(term.replace('x', ''));
+                        } else if (term) {
+                            constant += parseFloat(term);
+                        }
+                    });
+
+                    const rightValue = parseFloat(rightSide);
+                    
+                    if (isNaN(rightValue) || (coefficient === 0 && !leftSide.includes('x'))) {
+                       return `Math Agent: I was unable to parse the equation "${equationStr}". I can solve simple linear equations like '3x - 7 = 14'.`;
+                    }
+                    if (coefficient === 0) {
+                        return (rightValue - constant === 0) ?
+                            "Math Agent: This is an identity (e.g., 5 = 5), so there are infinite solutions." :
+                            "Math Agent: This is a contradiction (e.g., 5 = 10), so there is no solution.";
+                    }
+
+                    const newRight = rightValue - constant;
+                    if (constant !== 0) {
+                        steps.push({
+                            description: `Isolate the variable term by moving the constant (${constant > 0 ? '+' : ''}${constant}) to the other side:`,
+                            equation: `${coefficient}x = ${rightValue} ${constant >= 0 ? '-' : '+'} ${Math.abs(constant)}`
+                        });
+                        steps.push({
+                            description: `Simplify the right side:`,
+                            equation: `${coefficient}x = ${newRight}`
+                        });
+                    }
+                    
+                    const solution = newRight / coefficient;
+                    if (coefficient !== 1) {
+                         steps.push({
+                            description: `Solve for x by dividing both sides by ${coefficient}:`,
+                            equation: `x = ${newRight} / ${coefficient}`
+                        });
+                    }
+                   
+                    steps.push({
+                        description: `Final Solution:`,
+                        equation: `x = ${solution}`
+                    });
+
+                    let solutionHTML = `<p class="text-lg font-medium mb-3">Solving: <span class="equation">${equationStr}</span></p>`;
+                    
+                    // Filter out the "start" step if distribution happened
+                    const stepsToDisplay = steps.filter((step, index) => !(index === 0 && steps.length > 1 && steps[1].description.includes('Distribute')));
+                    stepsToDisplay.forEach((step, index) => {
+                        solutionHTML += `
+                        <div class="math-step">
+                            <p class="font-medium text-sm text-gray-700">Step ${index + 1}: ${step.description}</p>
+                            <p class="equation my-2">${step.equation}</p>
+                        </div>`;
+                    });
+
+                    // Verification
+                    const verificationLHS = (coefficient * solution + constant);
+                    solutionHTML += `
+                    <div class="solution">
+                        <p class="font-semibold">Solution: <span class="equation">x = ${solution}</span></p>
+                        <p class="mt-2 text-sm">Verification (plugging into original simplified left side):</p>
+                        <p class="equation mt-1">${coefficient}(${solution}) ${constant >= 0 ? '+' : '-'} ${Math.abs(constant)} = ${rightValue}</p>
+                        <p class="equation mt-1">${verificationLHS.toFixed(5)} = ${rightValue.toFixed(5)}</p>
+                        ${Math.abs(verificationLHS - rightValue) < 1e-9 ? 
+                            '<p class="mt-2 text-green-600 font-medium">Both sides are equal! Solution is correct.</p>' :
+                            '<p class="mt-2 text-red-600 font-medium">Verification failed. Please check calculation.</p>'}
+                    </div>`;
+
+                    return solutionHTML;
                 } catch (e) {
-                    return `<p>Math Agent: I encountered an error solving this equation. Please make sure it's a valid linear equation.</p>`;
+                     console.error("Error solving equation:", e);
+                    return `<p>Math Agent: I encountered an error solving this equation. My solver is still learning! Please try a simple linear equation.</p>`;
                 }
             }
             
@@ -989,28 +952,24 @@
                     'gravitational constant': 'G = 6.67430 × 10⁻¹¹ m³ kg⁻¹ s⁻²',
                     'speed of light': 'c = 299,792,458 m/s',
                     'planck constant': 'h = 6.62607015 × 10⁻³⁴ J·s',
-                    'electron mass': 'mₑ = 9.1093837015 × 10⁻³¹ kg',
-                    'proton mass': 'mₚ = 1.67262192369 × 10⁻²⁷ kg',
-                    'avogadro constant': 'Nₐ = 6.02214076 × 10²³ mol⁻¹'
                 };
                 
                 // Newton's laws
-                if (lowerQuery.includes('newton') && lowerQuery.includes('second')) {
+                if (lowerQuery.includes('newton') && (lowerQuery.includes('second law') || lowerQuery.includes('2nd law'))) {
                     response = `Newton's second law states that the acceleration of an object is directly proportional to the net force acting on it and inversely proportional to its mass. The formula is F = m × a, where F is force, m is mass, and a is acceleration.`;
                     constantUsed = `Formula: F = m × a`;
                 } 
-                else if (lowerQuery.includes('newton') && lowerQuery.includes('third')) {
-                    response = `Newton's third law states that for every action, there is an equal and opposite reaction. When one body exerts a force on another, the second body exerts a force of equal magnitude in the opposite direction on the first body.`;
+                else if (lowerQuery.includes('newton') && (lowerQuery.includes('third law') || lowerQuery.includes('3rd law'))) {
+                    response = `Newton's third law states that for every action, there is an equal and opposite reaction.`;
                 } 
                 // Quantum entanglement
                 else if (lowerQuery.includes('quantum') && lowerQuery.includes('entanglement')) {
-                    response = `Quantum entanglement is a physical phenomenon where pairs or groups of particles interact so that the quantum state of each particle cannot be described independently, even when the particles are separated by a large distance.`;
+                    response = `Quantum entanglement is a phenomenon where two particles are linked in such a way that their fates are intertwined, no matter how far apart they are. Measuring a property of one particle instantly influences the other.`;
                 } 
                 // Constants lookup
                 else if (lowerQuery.includes('constant')) {
                     toolUsed = 'Constants Lookup';
                     
-                    // Find matching constant
                     const constantKey = Object.keys(constants).find(key => 
                         lowerQuery.includes(key)
                     );
@@ -1024,16 +983,11 @@
                 } 
                 // Thermodynamics
                 else if (lowerQuery.includes('thermodynamics')) {
-                    response = `The laws of thermodynamics describe the relationships between thermal energy and other forms of energy:
-                    <ol class="list-decimal pl-5 mt-2 space-y-1">
-                        <li>First Law: Energy cannot be created or destroyed, only transformed (conservation of energy).</li>
-                        <li>Second Law: The entropy of an isolated system never decreases.</li>
-                        <li>Third Law: As temperature approaches absolute zero, the entropy of a system approaches a constant minimum.</li>
-                    </ol>`;
+                    response = `The laws of thermodynamics describe the relationships between heat, work, and energy. The first law is about energy conservation, the second about entropy (disorder), and the third about absolute zero temperature.`;
                 } 
                 // Default physics response
                 else {
-                    response = `Physics Agent: I've analyzed your physics question about "${query}". Here's a detailed explanation...`;
+                    response = `Physics Agent: I've processed your physics question about "${query}". Please ask about a specific law, concept, or constant for a detailed explanation.`;
                 }
                 
                 return [response, toolUsed, constantUsed];
